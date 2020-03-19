@@ -72,9 +72,29 @@ export class TreeMenuProvider implements TreeDataProvider<TreeNode> {
         ._onDidChangeTreeData.event;
 
     private view: TreeView<TreeNode> | undefined;
+    private initializedTree: boolean = false;
 
     constructor() {
         //
+    }
+
+    async revealTree() {
+        if (!this.initializedTree) {
+            await this.refresh();
+        }
+
+        const learnMoreButton: TreeNode = getLearnMoreButton();
+        try {
+            if (this.view) {
+                // select the readme item
+                this.view.reveal(learnMoreButton, {
+                    focus: true,
+                    select: false
+                });
+            }
+        } catch (err) {
+            console.log(`Unable to select tree item: ${err.message}`);
+        }
     }
 
     bindView(zoomTreeView: TreeView<TreeNode>): void {
