@@ -1,4 +1,6 @@
 import { TreeNode } from "../models/TreeNode";
+import { ZoomInfo } from "../models/ZoomInfo";
+import { ZoomInfoManager } from "../managers/ZoomInfoManager";
 
 export class TreeNodeManager {
     private static instance: TreeNodeManager;
@@ -16,7 +18,13 @@ export class TreeNodeManager {
     }
 
     async getZoomTreeParents(): Promise<TreeNode[]> {
-        const treeItems: TreeNode[] = [];
+        const zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
+
+        const treeItems: TreeNode[] = zoomInfoList.map((info: ZoomInfo) => {
+            const node: TreeNode = new TreeNode();
+            node.label = info.link;
+            return node;
+        });
         return treeItems;
     }
 

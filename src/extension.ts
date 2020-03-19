@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
-import { createCommands } from "./commands/CommandUtil";
+import { createCommands } from "./utils/CommandUtil";
 
 // this method is called when the extension is activated
 export function activate(ctx: vscode.ExtensionContext) {

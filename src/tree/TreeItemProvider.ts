@@ -90,6 +90,7 @@ export class TreeItemProvider implements TreeDataProvider<TreeNode> {
 
     async getChildren(element?: TreeNode): Promise<TreeNode[]> {
         let nodeItems: TreeNode[] = [];
+        console.log("element: ", element);
         if (element) {
             // return the children of this element
             nodeItems = element.children;

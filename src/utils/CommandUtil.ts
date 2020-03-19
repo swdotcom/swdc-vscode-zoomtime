@@ -4,6 +4,7 @@ import {
     connectZoomTreeView
 } from "../tree/TreeItemProvider";
 import { TreeNode } from "../models/TreeNode";
+import { ZoomInfoManager } from "../managers/ZoomInfoManager";
 
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
@@ -20,10 +21,17 @@ export function createCommands(): { dispose: () => void } {
     provider.bindView(zoomTreeView);
     cmds.push(connectZoomTreeView(zoomTreeView));
 
-    // ZOOM LINK ADD BUTTON
+    // ZOOM LINK ADD BUTTON CMD
     cmds.push(
         commands.registerCommand("zoomtime.addZoomLink", () => {
-            //
+            ZoomInfoManager.getInstance().showAddZoomInfoFlow();
+        })
+    );
+
+    // ZOOM TREE REFRESH CMD
+    cmds.push(
+        commands.registerCommand("zoomtime.refreshZoomLinks", () => {
+            provider.refresh();
         })
     );
 
