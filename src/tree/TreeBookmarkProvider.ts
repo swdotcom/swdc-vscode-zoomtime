@@ -37,7 +37,7 @@ export const connectZoomBookmarkTreeView = (view: TreeView<TreeNode>) => {
             const item: TreeNode = e.selection[0];
             if (item.value) {
                 launchUrl(item.value);
-                commands.executeCommand("zoomtime.refreshZoomLinks");
+                commands.executeCommand("zoomtime.refreshTree");
             }
         }),
 

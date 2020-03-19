@@ -2,7 +2,8 @@
     "name": "zoom-time",
     "displayName": "Zoom Time",
     "description": "Zoom Time is an open source plugin that provides zoom interaction right in Visual Studio Code.",
-    "version": "0.0.1",
+    "version": "0.1.1",
+    "publisher": "softwaredotcom",
     "scripts": {
         "vscode:prepublish": "yarn run compile",
         "compile": "tsc -p ./",
@@ -16,6 +17,26 @@
     },
     "categories": [
         "Other"
+    ],
+    "icon": "images/app-icon-blue.png",
+    "galleryBanner": {
+        "color": "#384356",
+        "theme": "dark"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/swdotcom/swdc-vscode-zoomtime"
+    },
+    "remote.extensionKind": {
+        "softwaredotcom.swdc-vscode-zoomtime": "ui"
+    },
+    "license": "SEE LICENSE IN LICENSE",
+    "keywords": [
+        "zoom",
+        "productivity",
+        "meeting",
+        "video",
+        "conference"
     ],
     "activationEvents": [
         "*"
@@ -73,11 +94,7 @@
             "zoom-time": [
                 {
                     "id": "zoom-menu-tree",
-                    "name": "MENU"
-                },
-                {
-                    "id": "zoom-bookmark-tree",
-                    "name": "BOOKMARKS"
+                    "name": "EXPLORER"
                 }
             ]
         },

@@ -27,7 +27,7 @@ export class DocListenManager {
         const filename = this.getFileName(event);
         if (filename && filename === this.zoomInfoFile) {
             // file matches the zoom info file, refresh the tree
-            commands.executeCommand("zoomtime.refreshZoomLinks");
+            commands.executeCommand("zoomtime.refreshTree");
         }
     }
 

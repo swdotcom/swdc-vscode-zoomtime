@@ -12,8 +12,12 @@ import { ZoomTreeItem } from "./ZoomTreeItem";
 import {
     getSubmitFeedbackButton,
     getManageBookmarksButton,
-    getLearnMoreButton
+    getLearnMoreButton,
+    getDividerButton
 } from "./TreeButtonManager";
+import { ZoomInfo } from "../models/ZoomInfo";
+import { ZoomInfoManager } from "../managers/ZoomInfoManager";
+import { launchUrl } from "../utils/Util";
 
 const zoomCollapsedStateMap: any = {};
 
@@ -45,6 +49,9 @@ export const connectZoomMenuTreeView = (view: TreeView<TreeNode>) => {
                     // run the command
                     commands.executeCommand(item.command);
                 }
+            } else if (item.value) {
+                launchUrl(item.value);
+                commands.executeCommand("zoomtime.refreshTree");
             }
         }),
 
@@ -120,12 +127,47 @@ export class TreeMenuProvider implements TreeDataProvider<TreeNode> {
         // get the manage bookmarks button
         const manageBookmarksButton: TreeNode = getManageBookmarksButton();
         treeItems.push(manageBookmarksButton);
+
         // get the learn more button
         const learnMoreButton: TreeNode = getLearnMoreButton();
         treeItems.push(learnMoreButton);
+
         // get the submit feedback button
         const feedbackButton: TreeNode = getSubmitFeedbackButton();
         treeItems.push(feedbackButton);
+
+        // get the divider
+        const dividerButton: TreeNode = getDividerButton();
+        treeItems.push(dividerButton);
+
+        const zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
+
+        zoomInfoList.sort((a: ZoomInfo, b: ZoomInfo) => {
+            const nameA = a.name.toUpperCase();
+            const nameB = b.name.toUpperCase();
+            return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        });
+
+        const bookmarkItems: TreeNode[] = zoomInfoList.map((info: ZoomInfo) => {
+            // parent
+            const node: TreeNode = new TreeNode();
+            node.label = info.name;
+            node.tooltip = info.link;
+
+            const children: TreeNode[] = [];
+            // link child
+            const linkNode: TreeNode = new TreeNode();
+            linkNode.label = info.link;
+            linkNode.value = info.link;
+            linkNode.icon = "rocket-grey.png";
+            children.push(linkNode);
+
+            node.children = children;
+
+            return node;
+        });
+
+        treeItems.push(...bookmarkItems);
 
         return treeItems;
     }

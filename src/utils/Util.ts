@@ -1,8 +1,8 @@
 import { commands, ViewColumn, Uri, workspace, window } from "vscode";
 import { ZoomInfo } from "../models/ZoomInfo";
+
 const fs = require("fs");
 const os = require("os");
-
 const open = require("open");
 
 export function getExtensionName() {
@@ -18,6 +18,10 @@ export function isMac() {
 }
 
 export function launchUrl(url: string) {
+    if (!url.toLowerCase().startsWith("http")) {
+        // add it
+        url = `https://${url}`;
+    }
     open(url);
 }
 
@@ -137,20 +141,6 @@ export function getFileDataAsJson(file: string): any {
     }
     return data;
 }
-
-// export function displayReadmeIfNotExists(override = false) {
-//     const displayedReadme = getItem("vscode_ZtReadme");
-//     if (!displayedReadme || override) {
-//         const readmeUri = Uri.file(getLocalREADMEFile());
-
-//         commands.executeCommand(
-//             "markdown.showPreview",
-//             readmeUri,
-//             ViewColumn.One
-//         );
-//         setItem("vscode_CtReadme", true);
-//     }
-// }
 
 export function openFileInEditor(file: string) {
     workspace.openTextDocument(file).then(

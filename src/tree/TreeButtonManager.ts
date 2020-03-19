@@ -18,6 +18,10 @@ export function getActionButton(
     return item;
 }
 
+export function getDividerButton() {
+    return getActionButton("", "", "", "blue-line-96.png");
+}
+
 export function getSubmitFeedbackButton() {
     return getActionButton(
         "Submit feedback",

@@ -41,7 +41,7 @@ export class ZoomInfoManager {
             );
         }
 
-        commands.executeCommand("zoomtime.refreshZoomLinks");
+        commands.executeCommand("zoomtime.refreshTree");
     }
 
     editZoomInfoFile() {
@@ -75,19 +75,19 @@ export class ZoomInfoManager {
         zoomInfo.link = zoomLink;
         zoomInfo.name = zoomName;
         this.addZoomInfo(zoomInfo);
-        commands.executeCommand("zoomtime.refreshZoomLinks");
+        commands.executeCommand("zoomtime.refreshTree");
     }
 
     private async promptForName() {
         return await this.launchInputBox(
-            "Enter a name",
+            "Assign a name to the meeting",
             "Please enter a non-empty name to continue."
         );
     }
 
     private async promptForLink() {
         return await this.launchInputBox(
-            "Enter a zoom link",
+            "Enter a Zoom link",
             "Please enter a valid and non-empty link to continue.",
             true
         );
@@ -146,10 +146,10 @@ export class ZoomInfoManager {
         // check to make suer the link doesn't already exist
         if (Object.keys(existingData).length) {
             const linkExists = existingData.find(
-                (n: ZoomInfo) => n.link === info.link
+                (n: ZoomInfo) => n.name === info.name
             );
             if (linkExists) {
-                window.showErrorMessage("Link already exists");
+                window.showErrorMessage("Meeting name already exists");
                 return;
             }
         }

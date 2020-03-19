@@ -15,18 +15,6 @@ import { launchUrl, displayReadmeIfNotExists } from "./Util";
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
 
-    // ZOOM BOOKMARK TREE
-    const bookmarkProvider = new TreeBookmarkProvider();
-    const zoomBookmarkTreeView: TreeView<TreeNode> = window.createTreeView(
-        "zoom-bookmark-tree",
-        {
-            treeDataProvider: bookmarkProvider,
-            showCollapseAll: false
-        }
-    );
-    bookmarkProvider.bindView(zoomBookmarkTreeView);
-    cmds.push(connectZoomBookmarkTreeView(zoomBookmarkTreeView));
-
     // ZOOM MENU TREE
     const menuProvider = new TreeMenuProvider();
     const zoomMenuTreeView: TreeView<TreeNode> = window.createTreeView(
@@ -49,10 +37,10 @@ export function createCommands(): { dispose: () => void } {
         })
     );
 
-    // ZOOM TREE REFRESH CMD
+    // ZOOM MENU TREE REFRESH CMD
     cmds.push(
-        commands.registerCommand("zoomtime.refreshZoomLinks", () => {
-            bookmarkProvider.refresh();
+        commands.registerCommand("zoomtime.refreshTree", () => {
+            menuProvider.refresh();
         })
     );
 
@@ -77,6 +65,7 @@ export function createCommands(): { dispose: () => void } {
     cmds.push(
         commands.registerCommand("zoomtime.sendFeedback", () => {
             launchUrl("mailto:cody@software.com");
+            commands.executeCommand("zoomtime.refreshTree");
         })
     );
 
@@ -84,6 +73,7 @@ export function createCommands(): { dispose: () => void } {
     cmds.push(
         commands.registerCommand("zoomtime.displayReadme", () => {
             displayReadmeIfNotExists(true /*override*/);
+            commands.executeCommand("zoomtime.refreshTree");
         })
     );
 
@@ -91,6 +81,7 @@ export function createCommands(): { dispose: () => void } {
     cmds.push(
         commands.registerCommand("zoomtime.manageBookmarks", () => {
             ZoomInfoManager.getInstance().editZoomInfoFile();
+            commands.executeCommand("zoomtime.refreshTree");
         })
     );
 
