@@ -1,7 +1,7 @@
 <br />
 
 <h1 align="center">
-  <img src="https://swdc-zoomtime.s3-us-west-1.amazonaws.com/zoomtime.png" width="35px" style="margin: 0 10px -2px 0"/>
+  <img src="https://swdc-zoomtime.s3-us-west-1.amazonaws.com/zoomtime.png" width="35px" style="margin: 0 7px -2px 0"/>
   Zoom Time
   <br />
   &nbsp
@@ -41,17 +41,17 @@
 **2. Join a Zoom meeting from bookmarks**
 
 <p align="center" style="margin: 0 10%">
-  Click on a link in your bookmarks to join a meeting
+  Click on a link in your bookmarks to join a meeting.
   <img src="https://swdc-zoomtime.s3-us-west-1.amazonaws.com/3-join-meeting.png" alt="Join Zoom meeting" />
 </p>
 
 ## Coming soon
 
--   **See and join upcoming meetings:** Integrations with Zoom and Google Calendar to see and join upcoming meetings with one click
+- **See and join upcoming meetings:** Integrations with Zoom and Google Calendar to see and join upcoming meetings with one click
 
--   **Invite teammates to meetings:** Easily send an invitation and meeting link to teammates via Email or Slack
+- **Invite teammates to meetings:** Easily send an invitation and meeting link to teammates via Email or Slack
 
--   **Correlate meeting time with code time:** See the total time you've spent in meetings and coding every day and see the correlation to help protect your code time
+- **Correlate meeting time with code time:** See the total time you've spent in meetings and coding every day and see the correlation to help protect your code time
 
 ## Get in touch
 
@@ -59,8 +59,8 @@ Enjoying Zoom Time? Let us know how it’s going by tweeting or following us at 
 
 **Other plugins by Software:**
 
--   **Code Time:** See programming metrics right in Visual Studio Code, then find and protect your most productive code times. Install it [here](https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-vscode).
+- **Code Time:** See programming metrics right in Visual Studio Code, then find and protect your most productive code times. Install it [here](https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-vscode).
 
--   **Music Time (beta):** Control Spotify from VS Code and use AI to find your most productive songs for coding. Learn more [here](https://www.software.com).
+- **Music Time (beta):** Control Spotify from VS Code and use AI to find your most productive songs for coding. Learn more [here](https://www.software.com).
 
 Have any questions? Please email us at [support@software.com](mailto:support@software.com) and we’ll get back to you as soon as we can.
