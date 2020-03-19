@@ -52,8 +52,12 @@
         "views": {
             "zoom-time": [
                 {
-                    "id": "zoom-tree",
-                    "name": "Links"
+                    "id": "zoom-menu-tree",
+                    "name": "MENU"
+                },
+                {
+                    "id": "zoom-bookmark-tree",
+                    "name": "BOOKMARKS"
                 }
             ]
         },
@@ -74,7 +78,7 @@
                 {
                     "command": "zoomtime.addZoomLink",
                     "group": "navigation@2",
-                    "when": "view =~ /zoom-tree/"
+                    "when": "view =~ /zoom-bookmark-tree/"
                 }
             ]
         }

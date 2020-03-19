@@ -9,13 +9,13 @@ import {
 } from "vscode";
 import { TreeNode } from "../models/TreeNode";
 import { ZoomTreeItem } from "./ZoomTreeItem";
-import { TreeNodeManager } from "./TreeNodeManager";
 import { ZoomInfoManager } from "../managers/ZoomInfoManager";
+import { ZoomInfo } from "../models/ZoomInfo";
+import { launchUrl } from "../utils/Util";
 
-const treeNodeMgr: TreeNodeManager = TreeNodeManager.getInstance();
 const zoomCollapsedStateMap: any = {};
 
-export const connectZoomTreeView = (view: TreeView<TreeNode>) => {
+export const connectZoomBookmarkTreeView = (view: TreeView<TreeNode>) => {
     return Disposable.from(
         view.onDidCollapseElement(async e => {
             const item: TreeNode = e.element;
@@ -36,7 +36,7 @@ export const connectZoomTreeView = (view: TreeView<TreeNode>) => {
 
             const item: TreeNode = e.selection[0];
             if (item.value) {
-                ZoomInfoManager.getInstance().launchZoomInfoLink(item.value);
+                launchUrl(item.value);
                 commands.executeCommand("zoomtime.refreshZoomLinks");
             }
         }),
@@ -49,7 +49,7 @@ export const connectZoomTreeView = (view: TreeView<TreeNode>) => {
     );
 };
 
-export class TreeItemProvider implements TreeDataProvider<TreeNode> {
+export class TreeBookmarkProvider implements TreeDataProvider<TreeNode> {
     private _onDidChangeTreeData: EventEmitter<
         TreeNode | undefined
     > = new EventEmitter<TreeNode | undefined>();
@@ -103,9 +103,33 @@ export class TreeItemProvider implements TreeDataProvider<TreeNode> {
             nodeItems = element.children;
         } else {
             // return the parent elements
-            nodeItems = await treeNodeMgr.getZoomTreeParents();
+            nodeItems = await this.getZoomBookmarkParents();
         }
         return nodeItems;
+    }
+
+    async getZoomBookmarkParents(): Promise<TreeNode[]> {
+        const zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
+
+        const treeItems: TreeNode[] = zoomInfoList.map((info: ZoomInfo) => {
+            // parent
+            const node: TreeNode = new TreeNode();
+            node.label = info.name;
+            node.tooltip = info.link;
+
+            const children: TreeNode[] = [];
+            // link child
+            const linkNode: TreeNode = new TreeNode();
+            linkNode.label = info.link;
+            linkNode.value = info.link;
+            linkNode.icon = "rocket-grey.svg";
+            children.push(linkNode);
+
+            node.children = children;
+
+            return node;
+        });
+        return treeItems;
     }
 }
 

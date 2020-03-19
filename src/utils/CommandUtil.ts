@@ -1,26 +1,43 @@
 import { Disposable, commands, window, TreeView } from "vscode";
 import {
-    TreeItemProvider,
-    connectZoomTreeView
-} from "../tree/TreeItemProvider";
+    TreeBookmarkProvider,
+    connectZoomBookmarkTreeView
+} from "../tree/TreeBookmarkProvider";
 import { TreeNode } from "../models/TreeNode";
 import { ZoomInfoManager } from "../managers/ZoomInfoManager";
 import { DocListenManager } from "../managers/DocListenManager";
+import {
+    TreeMenuProvider,
+    connectZoomMenuTreeView
+} from "../tree/TreeMenuProvider";
+import { launchUrl } from "./Util";
 
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
 
-    // ZOOM TREE
-    const provider = new TreeItemProvider();
-    const zoomTreeView: TreeView<TreeNode> = window.createTreeView(
-        "zoom-tree",
+    // ZOOM BOOKMARK TREE
+    const bookmarkProvider = new TreeBookmarkProvider();
+    const zoomBookmarkTreeView: TreeView<TreeNode> = window.createTreeView(
+        "zoom-bookmark-tree",
         {
-            treeDataProvider: provider,
+            treeDataProvider: bookmarkProvider,
             showCollapseAll: false
         }
     );
-    provider.bindView(zoomTreeView);
-    cmds.push(connectZoomTreeView(zoomTreeView));
+    bookmarkProvider.bindView(zoomBookmarkTreeView);
+    cmds.push(connectZoomBookmarkTreeView(zoomBookmarkTreeView));
+
+    // ZOOM MENU TREE
+    const menuProvider = new TreeMenuProvider();
+    const zoomMenuTreeView: TreeView<TreeNode> = window.createTreeView(
+        "zoom-menu-tree",
+        {
+            treeDataProvider: menuProvider,
+            showCollapseAll: false
+        }
+    );
+    menuProvider.bindView(zoomMenuTreeView);
+    cmds.push(connectZoomMenuTreeView(zoomMenuTreeView));
 
     // INIT THE DOCUMENT LISTENER
     DocListenManager.getInstance();
@@ -35,7 +52,7 @@ export function createCommands(): { dispose: () => void } {
     // ZOOM TREE REFRESH CMD
     cmds.push(
         commands.registerCommand("zoomtime.refreshZoomLinks", () => {
-            provider.refresh();
+            bookmarkProvider.refresh();
         })
     );
 
@@ -53,6 +70,13 @@ export function createCommands(): { dispose: () => void } {
     cmds.push(
         commands.registerCommand("zoomtime.editZoomLink", (item: TreeNode) => {
             ZoomInfoManager.getInstance().editZoomInfoFile();
+        })
+    );
+
+    // SUBMIT FEEDBACK CMD
+    cmds.push(
+        commands.registerCommand("zoomtime.sendFeedback", () => {
+            launchUrl("mailto:cody@software.com");
         })
     );
 

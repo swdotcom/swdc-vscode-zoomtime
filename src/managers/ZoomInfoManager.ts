@@ -6,8 +6,7 @@ import {
     openFileInEditor
 } from "../utils/FileUtil";
 import { window, commands } from "vscode";
-import { isWindows } from "../utils/Util";
-const open = require("open");
+import { isWindows, isValidUrl } from "../utils/Util";
 
 export class ZoomInfoManager {
     private static instance: ZoomInfoManager;
@@ -22,17 +21,13 @@ export class ZoomInfoManager {
         return ZoomInfoManager.instance;
     }
 
-    launchZoomInfoLink(linkValue: string) {
-        open(linkValue);
-    }
-
     removeZoomInfo(label: string) {
         const file = this.getZoomInfoFile();
         let existingData: ZoomInfo[] = getFileDataAsJson(file);
         if (!existingData) {
             return;
         }
-        const idx = existingData.findIndex((n: ZoomInfo) => n.alias === label);
+        const idx = existingData.findIndex((n: ZoomInfo) => n.name === label);
         if (idx !== -1) {
             // remove the item
             existingData.splice(idx, 1);
@@ -41,7 +36,7 @@ export class ZoomInfoManager {
             writeJsonData(existingData, file);
         } else {
             window.showErrorMessage(
-                `Unable to find zoom alias ${label} to delete`
+                `Unable to find zoom name '${label}' to delete`
             );
         }
 
@@ -54,35 +49,66 @@ export class ZoomInfoManager {
     }
 
     async showAddZoomInfoFlow() {
-        // launch the input
-        const zoomAlias = await this.launchInputBox(
-            "Enter zoom link alias",
-            "Please enter a non-empty zoom alias to continue."
-        );
-
-        if (zoomAlias) {
-            // now ask for the link
-            const zoomLink = await this.launchInputBox(
-                "Enter zoom link",
-                "Please enter a non-empty zoom link to continue."
-            );
-
-            if (zoomLink) {
-                const zoomInfo: ZoomInfo = new ZoomInfo();
-                zoomInfo.link = zoomLink;
-                zoomInfo.alias = zoomAlias;
-                this.addZoomInfo(zoomInfo);
-                commands.executeCommand("zoomtime.refreshZoomLinks");
-            }
+        // link prompt
+        let zoomLink = await this.promptForLink();
+        if (!zoomLink) {
+            return;
         }
+
+        zoomLink = zoomLink.trim();
+
+        // name prompt
+        let zoomName = await this.promptForName();
+
+        if (!zoomName) {
+            return;
+            window.showInformationMessage(
+                "Please enter a zoom bookmark name to continue"
+            );
+        }
+
+        zoomName = zoomName.trim();
+
+        // add it
+        const zoomInfo: ZoomInfo = new ZoomInfo();
+        zoomInfo.link = zoomLink;
+        zoomInfo.name = zoomName;
+        this.addZoomInfo(zoomInfo);
+        commands.executeCommand("zoomtime.refreshZoomLinks");
     }
 
-    launchInputBox(placeHolder: string, usageMsg: string) {
+    private async promptForName() {
+        return await this.launchInputBox(
+            "Enter a name",
+            "Please enter a non-empty name to continue."
+        );
+    }
+
+    private async promptForLink() {
+        return await this.launchInputBox(
+            "Enter a zoom link",
+            "Please enter a valid and non-empty link to continue.",
+            true
+        );
+    }
+
+    private launchInputBox(
+        placeHolder: string,
+        usageMsg: string,
+        isUrl: boolean = false
+    ) {
         return window.showInputBox({
             value: "",
             placeHolder,
             validateInput: text => {
-                return !text ? usageMsg : null;
+                if (isUrl) {
+                    if (!text || !isValidUrl(text)) {
+                        return usageMsg;
+                    }
+                } else if (!text) {
+                    return usageMsg;
+                }
+                return null;
             }
         });
     }
