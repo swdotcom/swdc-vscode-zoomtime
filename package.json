@@ -53,13 +53,15 @@
             "view/item/context": [
                 {
                     "command": "zoomtime.removeZoomLink",
-                    "group": "inline@2"
+                    "group": "inline@2",
+                    "when": "viewItem =~ /link_parent/"
                 }
             ],
             "view/title": [
                 {
                     "command": "zoomtime.addZoomLink",
-                    "group": "navigation@2"
+                    "group": "navigation@2",
+                    "when": "view =~ /zoom-tree/"
                 }
             ]
         }

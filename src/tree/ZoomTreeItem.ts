@@ -18,15 +18,21 @@ export class ZoomTreeItem extends TreeItem {
     ) {
         super(treeItem.label, collapsibleState);
 
-        const { lightPath, darkPath, contextValue } = getTreeItemIcon(treeItem);
+        // get the description (sub label)
+        this.description = treeItem.description;
+
+        // get the icons
+        const { lightPath, darkPath } = getTreeItemIcon(treeItem);
         if (lightPath && darkPath) {
             this.iconPath.light = lightPath;
             this.iconPath.dark = darkPath;
         } else {
-            // no matching tag, remove the tree item icon path
+            // no icon found, delete it
             delete this.iconPath;
         }
-        this.contextValue = contextValue;
+
+        // set the context value (used in the config to match for icon hovering)
+        this.contextValue = treeItem.contextValue;
     }
 
     get tooltip(): string {
@@ -59,5 +65,5 @@ function getTreeItemIcon(treeItem: TreeNode): any {
             ? path.join(resourcePath, "dark", iconName)
             : null;
     const contextValue = treeItem.contextValue;
-    return { lightPath, darkPath, contextValue };
+    return { lightPath, darkPath };
 }
