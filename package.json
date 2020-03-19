@@ -45,7 +45,7 @@
                 {
                     "id": "zoom-time",
                     "title": "Zoom Time",
-                    "icon": "resources/dark/paw-outlined.svg"
+                    "icon": "resources/dark/camera.png"
                 }
             ]
         },
