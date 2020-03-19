@@ -16,11 +16,23 @@
     "contributes": {
         "commands": [
             {
+                "command": "zoomtime.manageBookmarks",
+                "title": "Zoom Time: Edit your bookmarks"
+            },
+            {
+                "command": "zoomtime.displayReadme",
+                "title": "Zoom Time: Learn more"
+            },
+            {
+                "command": "zoomtime.sendFeedback",
+                "title": "Zoom Time: Submit feedback"
+            },
+            {
                 "command": "zoomtime.addZoomLink",
                 "title": "Add zoom link",
                 "icon": {
-                    "light": "resources/light/add.svg",
-                    "dark": "resources/dark/add.svg"
+                    "light": "resources/light/add.png",
+                    "dark": "resources/dark/add.png"
                 }
             },
             {
@@ -78,7 +90,7 @@
                 {
                     "command": "zoomtime.addZoomLink",
                     "group": "navigation@2",
-                    "when": "view =~ /zoom-bookmark-tree/"
+                    "when": "view =~ /zoom-menu-tree/"
                 }
             ]
         }

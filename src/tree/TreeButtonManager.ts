@@ -18,11 +18,29 @@ export function getActionButton(
     return item;
 }
 
-export function getSubmitFeedbackButtion() {
+export function getSubmitFeedbackButton() {
     return getActionButton(
         "Submit feedback",
         "Send us an email at cody@software.com",
         "zoomtime.sendFeedback",
         "message.svg"
+    );
+}
+
+export function getLearnMoreButton() {
+    return getActionButton(
+        "Learn more",
+        "View the Code Time Readme to learn more",
+        "zoomtime.displayReadme",
+        "readme.png"
+    );
+}
+
+export function getManageBookmarksButton() {
+    return getActionButton(
+        "Manage bookmarks",
+        "",
+        "zoomtime.manageBookmarks",
+        "settings.png"
     );
 }

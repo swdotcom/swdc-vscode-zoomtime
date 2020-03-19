@@ -122,7 +122,7 @@ export class TreeBookmarkProvider implements TreeDataProvider<TreeNode> {
             const linkNode: TreeNode = new TreeNode();
             linkNode.label = info.link;
             linkNode.value = info.link;
-            linkNode.icon = "rocket-grey.svg";
+            linkNode.icon = "rocket-grey.png";
             children.push(linkNode);
 
             node.children = children;

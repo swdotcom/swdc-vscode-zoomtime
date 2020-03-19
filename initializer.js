@@ -17,6 +17,11 @@ async function initialize() {
     );
 
     await runCommand(
+        `${copyCmd} README.md out${pathSep}.`,
+        "Copy the README.md to the out directory"
+    );
+
+    await runCommand(
         `${copyCmd} resources${pathSep}* out${pathSep}resources${pathSep}.`,
         "Copy the resources to the out dir"
     );

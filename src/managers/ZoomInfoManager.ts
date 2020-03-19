@@ -1,12 +1,13 @@
 import { ZoomInfo } from "../models/ZoomInfo";
+import { window, commands } from "vscode";
 import {
+    isWindows,
+    isValidUrl,
     getFileDataAsJson,
     writeJsonData,
-    getSoftwareDir,
-    openFileInEditor
-} from "../utils/FileUtil";
-import { window, commands } from "vscode";
-import { isWindows, isValidUrl } from "../utils/Util";
+    openFileInEditor,
+    getSoftwareDir
+} from "../utils/Util";
 
 export class ZoomInfoManager {
     private static instance: ZoomInfoManager;

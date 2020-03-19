@@ -4,11 +4,16 @@ import {
     EventEmitter,
     Event,
     Disposable,
-    TreeView
+    TreeView,
+    commands
 } from "vscode";
 import { TreeNode } from "../models/TreeNode";
 import { ZoomTreeItem } from "./ZoomTreeItem";
-import { getSubmitFeedbackButtion } from "./TreeButtonManager";
+import {
+    getSubmitFeedbackButton,
+    getManageBookmarksButton,
+    getLearnMoreButton
+} from "./TreeButtonManager";
 
 const zoomCollapsedStateMap: any = {};
 
@@ -32,6 +37,15 @@ export const connectZoomMenuTreeView = (view: TreeView<TreeNode>) => {
             }
 
             const item: TreeNode = e.selection[0];
+            if (item.command) {
+                const args = item.commandArgs || null;
+                if (args) {
+                    commands.executeCommand(item.command, ...args);
+                } else {
+                    // run the command
+                    commands.executeCommand(item.command);
+                }
+            }
         }),
 
         view.onDidChangeVisibility(e => {
@@ -104,9 +118,13 @@ export class TreeMenuProvider implements TreeDataProvider<TreeNode> {
     async getZoomMenuParents(): Promise<TreeNode[]> {
         const treeItems: TreeNode[] = [];
         // get the manage bookmarks button
+        const manageBookmarksButton: TreeNode = getManageBookmarksButton();
+        treeItems.push(manageBookmarksButton);
         // get the learn more button
+        const learnMoreButton: TreeNode = getLearnMoreButton();
+        treeItems.push(learnMoreButton);
         // get the submit feedback button
-        const feedbackButton: TreeNode = getSubmitFeedbackButtion();
+        const feedbackButton: TreeNode = getSubmitFeedbackButton();
         treeItems.push(feedbackButton);
 
         return treeItems;

@@ -10,7 +10,7 @@ import {
     TreeMenuProvider,
     connectZoomMenuTreeView
 } from "../tree/TreeMenuProvider";
-import { launchUrl } from "./Util";
+import { launchUrl, displayReadmeIfNotExists } from "./Util";
 
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
@@ -77,6 +77,20 @@ export function createCommands(): { dispose: () => void } {
     cmds.push(
         commands.registerCommand("zoomtime.sendFeedback", () => {
             launchUrl("mailto:cody@software.com");
+        })
+    );
+
+    // LEARN MORE CMD
+    cmds.push(
+        commands.registerCommand("zoomtime.displayReadme", () => {
+            displayReadmeIfNotExists(true /*override*/);
+        })
+    );
+
+    // MANAGE BOOKMARKS CMD
+    cmds.push(
+        commands.registerCommand("zoomtime.manageBookmarks", () => {
+            ZoomInfoManager.getInstance().editZoomInfoFile();
         })
     );
 
