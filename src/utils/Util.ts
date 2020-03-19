@@ -4,6 +4,7 @@ import { ZoomInfo } from "../models/ZoomInfo";
 const fs = require("fs");
 const os = require("os");
 const open = require("open");
+const { exec } = require("child_process");
 
 export function getExtensionName() {
     return "zoom-time";
@@ -63,7 +64,7 @@ export function getLocalREADMEFile() {
 }
 
 export function displayReadmeIfNotExists(override = false) {
-    const displayedReadme = getItem("vscode_CtReadme");
+    const displayedReadme = getItem("vscode_ZtReadme");
     if (!displayedReadme || override) {
         const readmeUri = Uri.file(getLocalREADMEFile());
 
@@ -72,7 +73,7 @@ export function displayReadmeIfNotExists(override = false) {
             readmeUri,
             ViewColumn.One
         );
-        setItem("vscode_CtReadme", true);
+        setItem("vscode_ZtReadme", true);
     }
 }
 
@@ -177,6 +178,89 @@ export function cleanJsonString(content: string) {
         .replace(/\n/g, "")
         .trim();
     return content;
+}
+
+export function nowInSecs() {
+    return Math.round(Date.now() / 1000);
+}
+
+export async function getHostname() {
+    let hostname = await getCommandResultLine("hostname");
+    return hostname;
+}
+
+export async function getOsUsername() {
+    let username = os.userInfo().username;
+    if (!username || username.trim() === "") {
+        username = await getCommandResultLine("whoami");
+    }
+    return username;
+}
+
+export async function getCommandResultLine(cmd: string, projectDir = null) {
+    const resultList = await getCommandResultList(cmd, projectDir);
+
+    let resultLine = "";
+    if (resultList && resultList.length) {
+        for (let i = 0; i < resultList.length; i++) {
+            let line = resultList[i];
+            if (line && line.trim().length > 0) {
+                resultLine = line.trim();
+                break;
+            }
+        }
+    }
+    return resultLine;
+}
+
+export async function getCommandResultList(cmd: string, projectDir = null) {
+    let result: string = await wrapExecPromise(`${cmd}`, projectDir);
+    if (!result) {
+        return [];
+    }
+    const contentList = result
+        .replace(/\r\n/g, "\r")
+        .replace(/\n/g, "\r")
+        .split(/\r/);
+    return contentList;
+}
+
+export async function wrapExecPromise(
+    cmd: string,
+    projectDir: any = ""
+): Promise<string> {
+    let result: string = "";
+    try {
+        let opts =
+            projectDir !== undefined && projectDir !== null && projectDir
+                ? { cwd: projectDir }
+                : {};
+        result = await execPromise(cmd, opts).catch(e => {
+            if (e.message) {
+                console.log("task error: ", e.message);
+            }
+            return "";
+        });
+    } catch (e) {
+        if (e.message) {
+            console.log("task error: ", e.message);
+        }
+        result = "";
+    }
+    return result;
+}
+
+function execPromise(command: string, opts: any): Promise<string> {
+    return new Promise(function(resolve, reject) {
+        exec(command, opts, (error: any, stdout: any, stderr: any) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(stdout.trim());
+        });
+    });
 }
 
 export function logIt(message: string) {
