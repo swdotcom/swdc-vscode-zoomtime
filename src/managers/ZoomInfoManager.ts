@@ -26,22 +26,26 @@ export class ZoomInfoManager {
         open(linkValue);
     }
 
-    removeZoomInfo(link: string) {
+    removeZoomInfo(label: string) {
         const file = this.getZoomInfoFile();
         let existingData: ZoomInfo[] = getFileDataAsJson(file);
         if (!existingData) {
             return;
         }
-        const idx = existingData.findIndex((n: ZoomInfo) => n.link === link);
+        const idx = existingData.findIndex((n: ZoomInfo) => n.alias === label);
         if (idx !== -1) {
             // remove the item
             existingData.splice(idx, 1);
 
             // save it
             writeJsonData(existingData, file);
-
-            commands.executeCommand("zoomtime.refreshZoomLinks");
+        } else {
+            window.showErrorMessage(
+                `Unable to find zoom alias ${label} to delete`
+            );
         }
+
+        commands.executeCommand("zoomtime.refreshZoomLinks");
     }
 
     editZoomInfoFile() {

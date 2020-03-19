@@ -62,12 +62,12 @@
                 {
                     "command": "zoomtime.editZoomLink",
                     "group": "inline@2",
-                    "when": "viewItem =~ /link_parent/"
+                    "when": "viewItem =~ /parent/"
                 },
                 {
                     "command": "zoomtime.removeZoomLink",
                     "group": "inline@3",
-                    "when": "viewItem =~ /link_parent/"
+                    "when": "viewItem =~ /parent/"
                 }
             ],
             "view/title": [

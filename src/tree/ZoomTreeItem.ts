@@ -32,7 +32,7 @@ export class ZoomTreeItem extends TreeItem {
         }
 
         // set the context value (used in the config to match for icon hovering)
-        this.contextValue = treeItem.contextValue;
+        this.contextValue = getTreeItemContextValue(treeItem);
     }
 
     get tooltip(): string {
@@ -64,6 +64,12 @@ function getTreeItemIcon(treeItem: TreeNode): any {
         iconName && treeItem.children.length === 0
             ? path.join(resourcePath, "dark", iconName)
             : null;
-    const contextValue = treeItem.contextValue;
     return { lightPath, darkPath };
+}
+
+function getTreeItemContextValue(treeItem: TreeNode): string {
+    if (treeItem.children.length) {
+        return "parent";
+    }
+    return "child";
 }

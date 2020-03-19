@@ -25,14 +25,12 @@ export class TreeNodeManager {
             const node: TreeNode = new TreeNode();
             node.label = info.alias;
             node.tooltip = info.link;
-            node.contextValue = "link_parent";
 
             const children: TreeNode[] = [];
             // link child
             const linkNode: TreeNode = new TreeNode();
             linkNode.label = info.link;
             linkNode.value = info.link;
-            linkNode.contextValue = "link";
             children.push(linkNode);
 
             node.children = children;

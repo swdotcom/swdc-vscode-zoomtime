@@ -1,5 +1,6 @@
 import { isWindows } from "./Util";
 import { commands, ViewColumn, Uri, workspace, window } from "vscode";
+import { ZoomInfo } from "../models/ZoomInfo";
 const os = require("os");
 const fs = require("fs");
 
@@ -19,7 +20,7 @@ export function getSoftwareDir(autoCreate = true) {
     return softwareDataDir;
 }
 
-export function writeJsonData(data: any, file: string) {
+export function writeJsonData(data: ZoomInfo[], file: string) {
     try {
         const content = JSON.stringify(data, null, 4);
         fs.writeFileSync(file, content, (err: { message: any }) => {

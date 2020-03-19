@@ -5,6 +5,7 @@ import {
 } from "../tree/TreeItemProvider";
 import { TreeNode } from "../models/TreeNode";
 import { ZoomInfoManager } from "../managers/ZoomInfoManager";
+import { DocListenManager } from "../managers/DocListenManager";
 
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
@@ -20,6 +21,9 @@ export function createCommands(): { dispose: () => void } {
     );
     provider.bindView(zoomTreeView);
     cmds.push(connectZoomTreeView(zoomTreeView));
+
+    // INIT THE DOCUMENT LISTENER
+    DocListenManager.getInstance();
 
     // ZOOM LINK ADD BUTTON CMD
     cmds.push(
@@ -40,7 +44,7 @@ export function createCommands(): { dispose: () => void } {
         commands.registerCommand(
             "zoomtime.removeZoomLink",
             (item: TreeNode) => {
-                ZoomInfoManager.getInstance().removeZoomInfo(item.value);
+                ZoomInfoManager.getInstance().removeZoomInfo(item.label);
             }
         )
     );
