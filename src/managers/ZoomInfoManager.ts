@@ -2,7 +2,8 @@ import { ZoomInfo } from "../models/ZoomInfo";
 import {
     getFileDataAsJson,
     writeJsonData,
-    getSoftwareDir
+    getSoftwareDir,
+    openFileInEditor
 } from "../utils/FileUtil";
 import { window, commands } from "vscode";
 import { isWindows } from "../utils/Util";
@@ -21,8 +22,8 @@ export class ZoomInfoManager {
         return ZoomInfoManager.instance;
     }
 
-    launchZoomInfoLink(link: string) {
-        open(link);
+    launchZoomInfoLink(linkValue: string) {
+        open(linkValue);
     }
 
     removeZoomInfo(link: string) {
@@ -41,6 +42,11 @@ export class ZoomInfoManager {
 
             commands.executeCommand("zoomtime.refreshZoomLinks");
         }
+    }
+
+    editZoomInfoFile() {
+        // open the json document in the editor
+        openFileInEditor(this.getZoomInfoFile());
     }
 
     async showAddZoomInfoFlow() {

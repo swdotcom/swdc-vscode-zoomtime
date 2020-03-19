@@ -35,9 +35,10 @@ export const connectZoomTreeView = (view: TreeView<TreeNode>) => {
             }
 
             const item: TreeNode = e.selection[0];
-
-            ZoomInfoManager.getInstance().launchZoomInfoLink(item.label);
-            commands.executeCommand("zoomtime.refreshZoomLinks");
+            if (item.value) {
+                ZoomInfoManager.getInstance().launchZoomInfoLink(item.value);
+                commands.executeCommand("zoomtime.refreshZoomLinks");
+            }
         }),
 
         view.onDidChangeVisibility(e => {

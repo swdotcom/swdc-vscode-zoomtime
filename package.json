@@ -24,6 +24,14 @@
                 }
             },
             {
+                "command": "zoomtime.editZoomLink",
+                "title": "Edit zoom link",
+                "icon": {
+                    "light": "resources/light/folder.svg",
+                    "dark": "resources/dark/folder.svg"
+                }
+            },
+            {
                 "command": "zoomtime.removeZoomLink",
                 "title": "Remove zoom link",
                 "icon": {
@@ -52,8 +60,13 @@
         "menus": {
             "view/item/context": [
                 {
-                    "command": "zoomtime.removeZoomLink",
+                    "command": "zoomtime.editZoomLink",
                     "group": "inline@2",
+                    "when": "viewItem =~ /link_parent/"
+                },
+                {
+                    "command": "zoomtime.removeZoomLink",
+                    "group": "inline@3",
                     "when": "viewItem =~ /link_parent/"
                 }
             ],

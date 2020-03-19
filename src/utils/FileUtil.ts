@@ -1,4 +1,5 @@
 import { isWindows } from "./Util";
+import { commands, ViewColumn, Uri, workspace, window } from "vscode";
 const os = require("os");
 const fs = require("fs");
 
@@ -44,6 +45,49 @@ export function getFileDataAsJson(file: string): any {
         }
     }
     return data;
+}
+
+// export function displayReadmeIfNotExists(override = false) {
+//     const displayedReadme = getItem("vscode_ZtReadme");
+//     if (!displayedReadme || override) {
+//         const readmeUri = Uri.file(getLocalREADMEFile());
+
+//         commands.executeCommand(
+//             "markdown.showPreview",
+//             readmeUri,
+//             ViewColumn.One
+//         );
+//         setItem("vscode_CtReadme", true);
+//     }
+// }
+
+export function openFileInEditor(file: string) {
+    workspace.openTextDocument(file).then(
+        doc => {
+            // Show open document and set focus
+            window
+                .showTextDocument(doc, 1, false)
+                .then(undefined, (error: any) => {
+                    if (error.message) {
+                        window.showErrorMessage(error.message);
+                    } else {
+                        console.log(error);
+                    }
+                });
+        },
+        (error: any) => {
+            if (
+                error.message &&
+                error.message.toLowerCase().includes("file not found")
+            ) {
+                window.showErrorMessage(
+                    `Cannot open ${file}.  File not found.`
+                );
+            } else {
+                console.log(error);
+            }
+        }
+    );
 }
 
 export function cleanJsonString(content: string) {

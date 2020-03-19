@@ -21,12 +21,14 @@ export class TreeNodeManager {
         const zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
 
         const treeItems: TreeNode[] = zoomInfoList.map((info: ZoomInfo) => {
+            // parent
             const node: TreeNode = new TreeNode();
             node.label = info.alias;
             node.tooltip = info.link;
             node.contextValue = "link_parent";
 
             const children: TreeNode[] = [];
+            // link child
             const linkNode: TreeNode = new TreeNode();
             linkNode.label = info.link;
             linkNode.value = info.link;

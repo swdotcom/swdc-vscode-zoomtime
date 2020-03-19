@@ -45,5 +45,12 @@ export function createCommands(): { dispose: () => void } {
         )
     );
 
+    // ZOOM LINK EDIT CMD
+    cmds.push(
+        commands.registerCommand("zoomtime.editZoomLink", (item: TreeNode) => {
+            ZoomInfoManager.getInstance().editZoomInfoFile();
+        })
+    );
+
     return Disposable.from(...cmds);
 }
