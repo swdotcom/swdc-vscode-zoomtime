@@ -63,9 +63,17 @@ export function getLocalREADMEFile() {
     return file;
 }
 
-export function displayReadmeIfNotExists(override = false) {
+export function displayReadmeIfNotExists(
+    override = false,
+    launchTreeOnInit = false
+) {
     const displayedReadme = getItem("vscode_ZtReadme");
     if (!displayedReadme || override) {
+        if (!displayedReadme && launchTreeOnInit) {
+            // reveal the tree
+            commands.executeCommand("zoomtime.displayTree");
+        }
+
         const readmeUri = Uri.file(getLocalREADMEFile());
 
         commands.executeCommand(

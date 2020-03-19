@@ -1,8 +1,4 @@
 import { Disposable, commands, window, TreeView } from "vscode";
-import {
-    TreeBookmarkProvider,
-    connectZoomBookmarkTreeView
-} from "../tree/TreeBookmarkProvider";
 import { TreeNode } from "../models/TreeNode";
 import { ZoomInfoManager } from "../managers/ZoomInfoManager";
 import { DocListenManager } from "../managers/DocListenManager";
@@ -26,6 +22,13 @@ export function createCommands(): { dispose: () => void } {
     );
     menuProvider.bindView(zoomMenuTreeView);
     cmds.push(connectZoomMenuTreeView(zoomMenuTreeView));
+
+    // REVEAL TREE CMD
+    cmds.push(
+        commands.registerCommand("zoomtime.displayTree", () => {
+            menuProvider.revealTree();
+        })
+    );
 
     // INIT THE DOCUMENT LISTENER
     DocListenManager.getInstance();
