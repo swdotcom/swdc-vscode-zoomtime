@@ -9,18 +9,18 @@
 
 <br />
 
-<p align="center"><a href="https://www.software.com/code-time">Access your team's Zoom links with one click, directly from VS Code.
+<p align="center"><a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.zoom-time">Access your team's Zoom links with one click, directly from VS Code.
 </p>
 
 <br />
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-zoomtime">
-    <img alt="Marketplace" src="https://vsmarketplacebadge.apphb.com/version-short/softwaredotcom.swdc-zoomtime.svg"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-zoomtime">
-    <img alt="Installs" src="https://vsmarketplacebadge.apphb.com/installs-short/softwaredotcom.swdc-zoomtime.svg"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-zoomtime">
-    <img alt="Rating" src="https://vsmarketplacebadge.apphb.com/rating-short/softwaredotcom.swdc-zoomtime.svg"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.zoom-time">
+    <img alt="Marketplace" src="https://vsmarketplacebadge.apphb.com/version-short/softwaredotcom.zoom-time.svg"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.zoom-time">
+    <img alt="Installs" src="https://vsmarketplacebadge.apphb.com/installs-short/softwaredotcom.zoom-time.svg"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.zoom-time">
+    <img alt="Rating" src="https://vsmarketplacebadge.apphb.com/rating-short/softwaredotcom.zoom-time.svg"></a>
 </p>
 
 <br />
