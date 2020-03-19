@@ -6,6 +6,7 @@ import {
 } from "../utils/FileUtil";
 import { window, commands } from "vscode";
 import { isWindows } from "../utils/Util";
+const open = require("open");
 
 export class ZoomInfoManager {
     private static instance: ZoomInfoManager;
@@ -20,23 +21,60 @@ export class ZoomInfoManager {
         return ZoomInfoManager.instance;
     }
 
-    async showAddZoomInfoFlow() {
-        // launch the input
-        const zoomLink = await window.showInputBox({
-            value: "",
-            placeHolder: "Enter a zoom link",
-            validateInput: text => {
-                return !text
-                    ? "Please enter a non-empty zoom link to continue."
-                    : null;
-            }
-        });
-        if (zoomLink) {
-            const zoomInfo: ZoomInfo = new ZoomInfo();
-            zoomInfo.link = zoomLink;
-            this.addZoomInfo(zoomInfo);
+    launchZoomInfoLink(link: string) {
+        open(link);
+    }
+
+    removeZoomInfo(link: string) {
+        const file = this.getZoomInfoFile();
+        let existingData: ZoomInfo[] = getFileDataAsJson(file);
+        if (!existingData) {
+            return;
+        }
+        const idx = existingData.findIndex((n: ZoomInfo) => n.link === link);
+        if (idx !== -1) {
+            // remove the item
+            existingData.splice(idx, 1);
+
+            // save it
+            writeJsonData(existingData, file);
+
             commands.executeCommand("zoomtime.refreshZoomLinks");
         }
+    }
+
+    async showAddZoomInfoFlow() {
+        // launch the input
+        const zoomAlias = await this.launchInputBox(
+            "Enter zoom link alias",
+            "Please enter a non-empty zoom alias to continue."
+        );
+
+        if (zoomAlias) {
+            // now ask for the link
+            const zoomLink = await this.launchInputBox(
+                "Enter zoom link",
+                "Please enter a non-empty zoom link to continue."
+            );
+
+            if (zoomLink) {
+                const zoomInfo: ZoomInfo = new ZoomInfo();
+                zoomInfo.link = zoomLink;
+                zoomInfo.alias = zoomAlias;
+                this.addZoomInfo(zoomInfo);
+                commands.executeCommand("zoomtime.refreshZoomLinks");
+            }
+        }
+    }
+
+    launchInputBox(placeHolder: string, usageMsg: string) {
+        return window.showInputBox({
+            value: "",
+            placeHolder,
+            validateInput: text => {
+                return !text ? usageMsg : null;
+            }
+        });
     }
 
     getZoomInfoFile() {

@@ -3,6 +3,7 @@ import { TreeItemCollapsibleState } from "vscode";
 export class TreeNode {
     public id: string = "";
     public label: string = "";
+    public value: any = null;
     public description: string = "";
     public tooltip: string = "";
     public command: string = "";

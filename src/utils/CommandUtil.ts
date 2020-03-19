@@ -35,5 +35,15 @@ export function createCommands(): { dispose: () => void } {
         })
     );
 
+    // ZOOM LINK REMOVE CMD
+    cmds.push(
+        commands.registerCommand(
+            "zoomtime.removeZoomLink",
+            (item: TreeNode) => {
+                ZoomInfoManager.getInstance().removeZoomInfo(item.value);
+            }
+        )
+    );
+
     return Disposable.from(...cmds);
 }

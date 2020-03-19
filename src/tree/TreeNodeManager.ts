@@ -22,7 +22,10 @@ export class TreeNodeManager {
 
         const treeItems: TreeNode[] = zoomInfoList.map((info: ZoomInfo) => {
             const node: TreeNode = new TreeNode();
-            node.label = info.link;
+            node.label = info.alias;
+            node.description = info.link;
+            node.value = info.link;
+            node.tooltip = info.link;
             return node;
         });
         return treeItems;

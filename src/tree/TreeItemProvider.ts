@@ -4,11 +4,13 @@ import {
     EventEmitter,
     Event,
     Disposable,
-    TreeView
+    TreeView,
+    commands
 } from "vscode";
 import { TreeNode } from "../models/TreeNode";
 import { ZoomTreeItem } from "./ZoomTreeItem";
 import { TreeNodeManager } from "./TreeNodeManager";
+import { ZoomInfoManager } from "../managers/ZoomInfoManager";
 
 const treeNodeMgr: TreeNodeManager = TreeNodeManager.getInstance();
 const zoomCollapsedStateMap: any = {};
@@ -33,7 +35,11 @@ export const connectZoomTreeView = (view: TreeView<TreeNode>) => {
             }
 
             const item: TreeNode = e.selection[0];
+
+            ZoomInfoManager.getInstance().launchZoomInfoLink(item.label);
+            commands.executeCommand("zoomtime.refreshZoomLinks");
         }),
+
         view.onDidChangeVisibility(e => {
             if (e.visible) {
                 //
@@ -90,7 +96,7 @@ export class TreeItemProvider implements TreeDataProvider<TreeNode> {
 
     async getChildren(element?: TreeNode): Promise<TreeNode[]> {
         let nodeItems: TreeNode[] = [];
-        console.log("element: ", element);
+
         if (element) {
             // return the children of this element
             nodeItems = element.children;
