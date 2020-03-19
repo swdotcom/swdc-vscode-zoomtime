@@ -14,12 +14,24 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
-        "commands": [
-            {
-                "command": "zoomtime.helloWorld",
-                "title": "Hello World"
-            }
-        ]
+        "commands": [],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "zoom-time",
+                    "title": "Zoom Time",
+                    "icon": "resources/dark/paw-outlined.svg"
+                }
+            ]
+        },
+        "views": {
+            "zoom-time": [
+                {
+                    "id": "zoom-tree",
+                    "name": "Links"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "yarn run compile",
