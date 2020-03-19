@@ -1,7 +1,7 @@
 {
     "name": "zoom-time",
     "displayName": "Zoom Time",
-    "description": "Zoom Time is an open source plugin that provides zoom interaction right in Visual Studio Code.",
+    "description": "Zoom Time is an open source plugin that provides Zoom bookmark interaction right in Visual Studio Code.",
     "version": "0.1.1",
     "publisher": "softwaredotcom",
     "scripts": {
@@ -58,7 +58,7 @@
             },
             {
                 "command": "zoomtime.addZoomLink",
-                "title": "Add zoom link",
+                "title": "Add Zoom link",
                 "icon": {
                     "light": "resources/light/add.png",
                     "dark": "resources/dark/add.png"
@@ -66,7 +66,7 @@
             },
             {
                 "command": "zoomtime.editZoomLink",
-                "title": "Edit zoom link",
+                "title": "Edit Zoom link",
                 "icon": {
                     "light": "resources/light/pencil.png",
                     "dark": "resources/dark/pencil.png"
@@ -74,7 +74,7 @@
             },
             {
                 "command": "zoomtime.removeZoomLink",
-                "title": "Remove zoom link",
+                "title": "Remove Zoom link",
                 "icon": {
                     "light": "resources/light/remove.svg",
                     "dark": "resources/dark/remove.svg"
