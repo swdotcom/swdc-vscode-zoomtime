@@ -8,7 +8,7 @@ import { TreeNode } from "../models/TreeNode";
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
 
-    // zoom tree view
+    // ZOOM TREE
     const provider = new TreeItemProvider();
     const zoomTreeView: TreeView<TreeNode> = window.createTreeView(
         "zoom-tree",
@@ -19,6 +19,13 @@ export function createCommands(): { dispose: () => void } {
     );
     provider.bindView(zoomTreeView);
     cmds.push(connectZoomTreeView(zoomTreeView));
+
+    // ZOOM LINK ADD BUTTON
+    cmds.push(
+        commands.registerCommand("zoomtime.addZoomLink", () => {
+            //
+        })
+    );
 
     return Disposable.from(...cmds);
 }

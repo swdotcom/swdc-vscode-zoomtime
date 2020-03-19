@@ -14,7 +14,16 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
-        "commands": [],
+        "commands": [
+            {
+                "command": "zoomtime.addZoomLink",
+                "title": "Add zoom link",
+                "icon": {
+                    "light": "resources/light/add.svg",
+                    "dark": "resources/dark/add.svg"
+                }
+            }
+        ],
         "viewsContainers": {
             "activitybar": [
                 {
@@ -29,6 +38,15 @@
                 {
                     "id": "zoom-tree",
                     "name": "Links"
+                }
+            ]
+        },
+        "menus": {
+            "view/item/context": [],
+            "view/title": [
+                {
+                    "command": "zoomtime.addZoomLink",
+                    "group": "navigation@2"
                 }
             ]
         }
