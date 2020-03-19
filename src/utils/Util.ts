@@ -49,10 +49,11 @@ export function getSoftwareSessionFile() {
 
 export function getLocalREADMEFile() {
     let file = __dirname;
+    // the readme is one directory above the util
     if (isWindows()) {
-        file += "\\README.md";
+        file += "\\..\\README.md";
     } else {
-        file += "/README.md";
+        file += "/../README.md";
     }
     return file;
 }
