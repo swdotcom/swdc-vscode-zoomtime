@@ -48,3 +48,24 @@ export function getManageBookmarksButton() {
         "settings.png"
     );
 }
+
+export function getConnectZoomButton() {
+    return getActionButton(
+        "Connect Zoom",
+        "",
+        "zoomtime.connectZoom",
+        "zoom.png"
+    );
+}
+
+export function getZoomConnectedButton() {
+    return getActionButton("Zoom connected", "", "", "zoom.png");
+}
+
+export function getNoBookmarksButton() {
+    return getActionButton("No bookmarks found", "", "", "");
+}
+
+export function getNoMeetingsButton() {
+    return getActionButton("No meetings found", "", "", "");
+}

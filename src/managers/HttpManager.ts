@@ -1,18 +1,16 @@
 import axios from "axios";
+import { api_endpoint, zoom_api_endpoint } from "../utils/Constants";
+import { getItem } from "../utils/Util";
 
-// API ENDPOINT
-//
-// "http://localhost:5000", "https://qaapi.software.com", "https://stagingapi.software.com", "https://api.software.com"
-export const api_endpoint = "https://api.software.com";
-
-// DASHBOARD URL
-//
-// "http://localhost:3000", "https://qa.software.com", "https://staging.software.com", "https://app.software.com"
-export const launch_url = "https://app.software.com";
+const querystring = require("querystring");
 
 // build the axios api base url
 const beApi = axios.create({
     baseURL: `${api_endpoint}`
+});
+
+const zoomBeApi = axios.create({
+    baseURL: `${zoom_api_endpoint}`
 });
 
 export async function serverIsAvailable() {
@@ -31,9 +29,21 @@ export async function serverIsAvailable() {
  * @param api
  * @param jwt
  */
-export async function softwareGet(api: string, jwt: string = "") {
+export async function softwareGet(
+    api: string,
+    jwt: string = "",
+    additionHeaders: any = {}
+) {
     if (jwt) {
         beApi.defaults.headers.common["Authorization"] = jwt;
+    }
+
+    if (additionHeaders && Object.keys(additionHeaders).length) {
+        // add the additional headers
+        beApi.defaults.headers.common = {
+            ...beApi.defaults.headers.common,
+            ...additionHeaders
+        };
     }
 
     return await beApi.get(api).catch(err => {
@@ -154,4 +164,28 @@ function getResponseStatus(resp: any) {
         status = resp.response.status;
     }
     return status;
+}
+
+export async function zoomGet(api: string, params: any = {}) {
+    const access_token = getItem("zoom_access_token");
+
+    zoomBeApi.defaults.headers.common[
+        "Authorization"
+    ] = `Bearer ${access_token}`;
+
+    if (params && Object.keys(params).length) {
+        const qryStr = querystring.stringify(params);
+        api = `${api}?${qryStr}`;
+    }
+
+    const resultData = await zoomBeApi
+        .get(api)
+        .then(resp => {
+            return { status: "success", data: resp.data };
+        })
+        .catch(e => {
+            console.log("Error retrieving Zoom data: ", e.message);
+            return { status: "failed", error: e, data: null };
+        });
+    return resultData;
 }

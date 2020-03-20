@@ -8,6 +8,7 @@ import {
     openFileInEditor,
     getSoftwareDir
 } from "../utils/Util";
+const fs = require("fs");
 
 export class ZoomInfoManager {
     private static instance: ZoomInfoManager;
@@ -45,6 +46,12 @@ export class ZoomInfoManager {
     }
 
     editZoomInfoFile() {
+        const file = this.getZoomInfoFile();
+        if (!fs.existsSync(file)) {
+            // create it
+            const data: any[] = [];
+            writeJsonData(data, file);
+        }
         // open the json document in the editor
         openFileInEditor(this.getZoomInfoFile());
     }

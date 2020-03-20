@@ -1,16 +1,11 @@
 import { window, ExtensionContext } from "vscode";
-import {
-    serverIsAvailable,
-    softwareGet,
-    isResponseOk,
-    softwarePost
-} from "./HttpManager";
+import { serverIsAvailable, isResponseOk, softwarePost } from "./HttpManager";
 import {
     getItem,
-    nowInSecs,
     setItem,
     getHostname,
-    getOsUsername
+    getOsUsername,
+    getAppJwt
 } from "../utils/Util";
 
 let secondary_window_activate_counter = 0;
@@ -99,20 +94,6 @@ export async function createAnonymousUser(serverIsOnline: boolean) {
                 setItem("jwt", resp.data.jwt);
                 return resp.data.jwt;
             }
-        }
-    }
-    return null;
-}
-
-/**
- * get the app jwt
- */
-export async function getAppJwt(serverIsOnline: boolean) {
-    if (serverIsOnline) {
-        // get the app jwt
-        let resp = await softwareGet(`/data/apptoken?token=${nowInSecs()}`);
-        if (isResponseOk(resp)) {
-            return resp.data.jwt;
         }
     }
     return null;

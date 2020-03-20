@@ -9,18 +9,14 @@ import {
 } from "vscode";
 import { TreeNode } from "../models/TreeNode";
 import { ZoomTreeItem } from "./ZoomTreeItem";
-import {
-    getSubmitFeedbackButton,
-    getManageBookmarksButton,
-    getLearnMoreButton,
-    getConnectZoomButton,
-    getZoomConnectedButton
-} from "./TreeButtonManager";
-import { launchUrl, getItem } from "../utils/Util";
+import { launchUrl } from "../utils/Util";
+import { ZoomMeetingManager } from "../managers/ZoomDataManager";
+import { ZoomMeeting } from "../models/ZoomMeeting";
+import { getNoMeetingsButton } from "./TreeButtonManager";
 
 const zoomCollapsedStateMap: any = {};
 
-export const connectZoomMenuTreeView = (view: TreeView<TreeNode>) => {
+export const connectZoomMeetingTreeView = (view: TreeView<TreeNode>) => {
     return Disposable.from(
         view.onDidCollapseElement(async e => {
             const item: TreeNode = e.element;
@@ -40,15 +36,7 @@ export const connectZoomMenuTreeView = (view: TreeView<TreeNode>) => {
             }
 
             const item: TreeNode = e.selection[0];
-            if (item.command) {
-                const args = item.commandArgs || null;
-                if (args) {
-                    commands.executeCommand(item.command, ...args);
-                } else {
-                    // run the command
-                    commands.executeCommand(item.command);
-                }
-            } else if (item.value) {
+            if (item.value) {
                 launchUrl(item.value);
                 commands.executeCommand("zoomtime.refreshTree");
             }
@@ -62,7 +50,7 @@ export const connectZoomMenuTreeView = (view: TreeView<TreeNode>) => {
     );
 };
 
-export class TreeMenuProvider implements TreeDataProvider<TreeNode> {
+export class TreeMeetingProvider implements TreeDataProvider<TreeNode> {
     private _onDidChangeTreeData: EventEmitter<
         TreeNode | undefined
     > = new EventEmitter<TreeNode | undefined>();
@@ -71,31 +59,9 @@ export class TreeMenuProvider implements TreeDataProvider<TreeNode> {
         ._onDidChangeTreeData.event;
 
     private view: TreeView<TreeNode> | undefined;
-    private initializedTree: boolean = false;
 
     constructor() {
         //
-    }
-
-    async revealTree() {
-        if (!this.initializedTree) {
-            await this.refresh();
-        }
-
-        setTimeout(() => {
-            const learnMoreButton: TreeNode = getLearnMoreButton();
-            try {
-                if (this.view) {
-                    // select the readme item
-                    this.view.reveal(learnMoreButton, {
-                        focus: true,
-                        select: false
-                    });
-                }
-            } catch (err) {
-                console.log(`Unable to select tree item: ${err.message}`);
-            }
-        }, 1000);
     }
 
     bindView(zoomTreeView: TreeView<TreeNode>): void {
@@ -138,38 +104,45 @@ export class TreeMenuProvider implements TreeDataProvider<TreeNode> {
             nodeItems = element.children;
         } else {
             // return the parent elements
-            nodeItems = await this.getZoomMenuParents();
+            nodeItems = await this.getZoomMeetingParents();
         }
         return nodeItems;
     }
 
-    async getZoomMenuParents(): Promise<TreeNode[]> {
-        const treeItems: TreeNode[] = [];
+    async getZoomMeetingParents(): Promise<TreeNode[]> {
+        let treeItems: TreeNode[] = [];
+        const meetings: ZoomMeeting[] = await ZoomMeetingManager.getInstance().getMeetings();
 
-        const zoomAccessToken = getItem("zoom_access_token");
-
-        if (!zoomAccessToken) {
-            // get the manage bookmarks button
-            const connectZoomButton: TreeNode = getConnectZoomButton();
-            treeItems.push(connectZoomButton);
-        } else {
-            // show zoom is connected
-            const zoomConnectedButton: TreeNode = getZoomConnectedButton();
-            treeItems.push(zoomConnectedButton);
+        if (!meetings || meetings.length === 0) {
+            const noMeetingsButton: TreeNode = getNoMeetingsButton();
+            treeItems.push(noMeetingsButton);
+            return treeItems;
         }
 
-        // get the manage bookmarks button
-        const manageBookmarksButton: TreeNode = getManageBookmarksButton();
-        treeItems.push(manageBookmarksButton);
+        meetings.sort((a: ZoomMeeting, b: ZoomMeeting) => {
+            const nameA = a.topic.toUpperCase();
+            const nameB = b.topic.toUpperCase();
+            return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        });
 
-        // get the learn more button
-        const learnMoreButton: TreeNode = getLearnMoreButton();
-        treeItems.push(learnMoreButton);
+        treeItems = meetings.map((info: ZoomMeeting) => {
+            // parent
+            const node: TreeNode = new TreeNode();
+            node.label = info.topic;
+            node.tooltip = info.join_url;
 
-        // get the submit feedback button
-        const feedbackButton: TreeNode = getSubmitFeedbackButton();
-        treeItems.push(feedbackButton);
+            const children: TreeNode[] = [];
+            // link child
+            const linkNode: TreeNode = new TreeNode();
+            linkNode.label = info.join_url;
+            linkNode.value = info.join_url;
+            linkNode.icon = "rocket-grey.png";
+            children.push(linkNode);
 
+            node.children = children;
+
+            return node;
+        });
         return treeItems;
     }
 }

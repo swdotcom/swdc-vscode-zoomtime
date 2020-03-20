@@ -12,6 +12,7 @@ import { ZoomTreeItem } from "./ZoomTreeItem";
 import { ZoomInfoManager } from "../managers/ZoomInfoManager";
 import { ZoomInfo } from "../models/ZoomInfo";
 import { launchUrl } from "../utils/Util";
+import { getNoBookmarksButton } from "./TreeButtonManager";
 
 const zoomCollapsedStateMap: any = {};
 
@@ -109,9 +110,22 @@ export class TreeBookmarkProvider implements TreeDataProvider<TreeNode> {
     }
 
     async getZoomBookmarkParents(): Promise<TreeNode[]> {
+        let treeItems: TreeNode[] = [];
         const zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
 
-        const treeItems: TreeNode[] = zoomInfoList.map((info: ZoomInfo) => {
+        if (!zoomInfoList || zoomInfoList.length === 0) {
+            const noMeetingsButton: TreeNode = getNoBookmarksButton();
+            treeItems.push(noMeetingsButton);
+            return treeItems;
+        }
+
+        zoomInfoList.sort((a: ZoomInfo, b: ZoomInfo) => {
+            const nameA = a.name.toUpperCase();
+            const nameB = b.name.toUpperCase();
+            return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        });
+
+        treeItems = zoomInfoList.map((info: ZoomInfo) => {
             // parent
             const node: TreeNode = new TreeNode();
             node.label = info.name;

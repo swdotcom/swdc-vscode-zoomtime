@@ -36,7 +36,9 @@
         "productivity",
         "meeting",
         "video",
-        "conference"
+        "conference",
+        "collaboration",
+        "remote"
     ],
     "activationEvents": [
         "*"
@@ -94,7 +96,15 @@
             "zoom-time": [
                 {
                     "id": "zoom-menu-tree",
-                    "name": "EXPLORER"
+                    "name": "MENU"
+                },
+                {
+                    "id": "zoom-bookmark-tree",
+                    "name": "BOOKMARKS"
+                },
+                {
+                    "id": "zoom-meeting-tree",
+                    "name": "MEETINGS"
                 }
             ]
         },
@@ -115,7 +125,7 @@
                 {
                     "command": "zoomtime.addZoomLink",
                     "group": "navigation@2",
-                    "when": "view =~ /zoom-menu-tree/"
+                    "when": "view =~ /zoom-bookmark-tree/"
                 }
             ]
         }
@@ -135,6 +145,7 @@
     },
     "dependencies": {
         "axios": "^0.19.2",
-        "open": "^7.0.3"
+        "open": "^7.0.3",
+        "querystring": "^0.2.0"
     }
 }

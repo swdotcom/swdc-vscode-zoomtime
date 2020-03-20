@@ -6,12 +6,20 @@ import {
     TreeMenuProvider,
     connectZoomMenuTreeView
 } from "../tree/TreeMenuProvider";
-import { launchUrl, displayReadmeIfNotExists } from "./Util";
+import { launchUrl, displayReadmeIfNotExists, connectZoom } from "./Util";
+import {
+    TreeBookmarkProvider,
+    connectZoomBookmarkTreeView
+} from "../tree/TreeBookmarkProvider";
+import {
+    TreeMeetingProvider,
+    connectZoomMeetingTreeView
+} from "../tree/TreeMeetingProvider";
 
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
 
-    // ZOOM MENU TREE
+    // MENU TREE
     const menuProvider = new TreeMenuProvider();
     const zoomMenuTreeView: TreeView<TreeNode> = window.createTreeView(
         "zoom-menu-tree",
@@ -23,6 +31,37 @@ export function createCommands(): { dispose: () => void } {
     menuProvider.bindView(zoomMenuTreeView);
     cmds.push(connectZoomMenuTreeView(zoomMenuTreeView));
 
+    // BOOKMARKS TREE
+    const bookmarkProvider = new TreeBookmarkProvider();
+    const zoomBookmarkTreeView: TreeView<TreeNode> = window.createTreeView(
+        "zoom-bookmark-tree",
+        {
+            treeDataProvider: bookmarkProvider,
+            showCollapseAll: true
+        }
+    );
+    bookmarkProvider.bindView(zoomBookmarkTreeView);
+    cmds.push(connectZoomBookmarkTreeView(zoomBookmarkTreeView));
+
+    // MEETINGS TREE
+    const meetingsProvider = new TreeMeetingProvider();
+    const zoomMeetingsTreeView: TreeView<TreeNode> = window.createTreeView(
+        "zoom-meeting-tree",
+        {
+            treeDataProvider: meetingsProvider,
+            showCollapseAll: true
+        }
+    );
+    meetingsProvider.bindView(zoomMeetingsTreeView);
+    cmds.push(connectZoomMeetingTreeView(zoomMeetingsTreeView));
+
+    // CONNECT CMD
+    cmds.push(
+        commands.registerCommand("zoomtime.connectZoom", () => {
+            connectZoom();
+        })
+    );
+
     // REVEAL TREE CMD
     cmds.push(
         commands.registerCommand("zoomtime.displayTree", () => {
@@ -33,21 +72,22 @@ export function createCommands(): { dispose: () => void } {
     // INIT THE DOCUMENT LISTENER
     DocListenManager.getInstance();
 
-    // ZOOM LINK ADD BUTTON CMD
+    // ADD BUTTON CMD
     cmds.push(
         commands.registerCommand("zoomtime.addZoomLink", () => {
             ZoomInfoManager.getInstance().showAddZoomInfoFlow();
         })
     );
 
-    // ZOOM MENU TREE REFRESH CMD
+    // REFRESH CMD
     cmds.push(
         commands.registerCommand("zoomtime.refreshTree", () => {
             menuProvider.refresh();
+            bookmarkProvider.refresh();
         })
     );
 
-    // ZOOM LINK REMOVE CMD
+    // REMOVE CMD
     cmds.push(
         commands.registerCommand(
             "zoomtime.removeZoomLink",
@@ -57,7 +97,7 @@ export function createCommands(): { dispose: () => void } {
         )
     );
 
-    // ZOOM LINK EDIT CMD
+    // EDIT CMD
     cmds.push(
         commands.registerCommand("zoomtime.editZoomLink", (item: TreeNode) => {
             ZoomInfoManager.getInstance().editZoomInfoFile();
