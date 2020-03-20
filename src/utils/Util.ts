@@ -411,3 +411,24 @@ export async function getZoomTimeUserStatus() {
     }
     return { loggedOn: false, state: "UNKNOWN" };
 }
+
+export function launchInputBox(
+    placeHolder: string,
+    usageMsg: string,
+    isUrl: boolean = false
+) {
+    return window.showInputBox({
+        value: "",
+        placeHolder,
+        validateInput: text => {
+            if (isUrl) {
+                if (!text || !isValidUrl(text)) {
+                    return usageMsg;
+                }
+            } else if (!text) {
+                return usageMsg;
+            }
+            return null;
+        }
+    });
+}

@@ -68,6 +68,9 @@ function getTreeItemIcon(treeItem: TreeNode): any {
 }
 
 function getTreeItemContextValue(treeItem: TreeNode): string {
+    if (treeItem.contextValue) {
+        return treeItem.contextValue;
+    }
     if (treeItem.children.length) {
         return "parent";
     }

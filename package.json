@@ -67,6 +67,14 @@
                 }
             },
             {
+                "command": "zoomtime.createZoomMeeting",
+                "title": "Create Zoom meeting",
+                "icon": {
+                    "light": "resources/light/add.png",
+                    "dark": "resources/dark/add.png"
+                }
+            },
+            {
                 "command": "zoomtime.editZoomLink",
                 "title": "Edit Zoom link",
                 "icon": {
@@ -113,12 +121,12 @@
                 {
                     "command": "zoomtime.editZoomLink",
                     "group": "inline@2",
-                    "when": "viewItem =~ /parent/"
+                    "when": "viewItem =~ /bookmark-parent/"
                 },
                 {
                     "command": "zoomtime.removeZoomLink",
                     "group": "inline@3",
-                    "when": "viewItem =~ /parent/"
+                    "when": "viewItem =~ /bookmark-parent/"
                 }
             ],
             "view/title": [
@@ -126,6 +134,11 @@
                     "command": "zoomtime.addZoomLink",
                     "group": "navigation@2",
                     "when": "view =~ /zoom-bookmark-tree/"
+                },
+                {
+                    "command": "zoomtime.createZoomMeeting",
+                    "group": "navigation@2",
+                    "when": "view =~ /zoom-meeting-tree/"
                 }
             ]
         }

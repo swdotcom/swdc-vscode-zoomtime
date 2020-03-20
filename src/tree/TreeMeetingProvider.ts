@@ -9,10 +9,15 @@ import {
 } from "vscode";
 import { TreeNode } from "../models/TreeNode";
 import { ZoomTreeItem } from "./ZoomTreeItem";
-import { launchUrl } from "../utils/Util";
-import { ZoomMeetingManager } from "../managers/ZoomDataManager";
+import { launchUrl, getItem } from "../utils/Util";
+import { ZoomMeetingManager } from "../managers/ZoomMeetingManager";
 import { ZoomMeeting } from "../models/ZoomMeeting";
-import { getNoMeetingsButton } from "./TreeButtonManager";
+import {
+    getNoMeetingsButton,
+    getConnectZoomInfoButton
+} from "./TreeButtonManager";
+import { ZoomInfoManager } from "../managers/ZoomInfoManager";
+import { ZoomInfo } from "../models/ZoomInfo";
 
 const zoomCollapsedStateMap: any = {};
 
@@ -111,14 +116,42 @@ export class TreeMeetingProvider implements TreeDataProvider<TreeNode> {
 
     async getZoomMeetingParents(): Promise<TreeNode[]> {
         let treeItems: TreeNode[] = [];
-        const meetings: ZoomMeeting[] = await ZoomMeetingManager.getInstance().getMeetings();
 
+        // 1st check to see if they've connected zoom. if not, we show an info message
+        const accessToken = getItem("zoom_access_token");
+        if (!accessToken) {
+            const connectZoomInfoButton: TreeNode = getConnectZoomInfoButton();
+            treeItems.push(connectZoomInfoButton);
+            return treeItems;
+        }
+        let meetings: ZoomMeeting[] = await ZoomMeetingManager.getInstance().getMeetings();
+
+        let zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
+        // get non-bookmark ones
+        zoomInfoList = zoomInfoList.filter((n: ZoomInfo) => !n.bookmark);
+
+        if (!meetings) {
+            meetings = [];
+        }
+        if (zoomInfoList && zoomInfoList.length) {
+            // add these
+            zoomInfoList.forEach((info: ZoomInfo) => {
+                const meeting: ZoomMeeting = new ZoomMeeting();
+                meeting.topic = info.topic;
+                meeting.join_url = info.join_url;
+
+                meetings.push(meeting);
+            });
+        }
+
+        // if no meetings, show an info message
         if (!meetings || meetings.length === 0) {
             const noMeetingsButton: TreeNode = getNoMeetingsButton();
             treeItems.push(noMeetingsButton);
             return treeItems;
         }
 
+        // sort the meetings
         meetings.sort((a: ZoomMeeting, b: ZoomMeeting) => {
             const nameA = a.topic.toUpperCase();
             const nameB = b.topic.toUpperCase();

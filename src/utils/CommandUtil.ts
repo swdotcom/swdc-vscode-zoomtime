@@ -15,6 +15,7 @@ import {
     TreeMeetingProvider,
     connectZoomMeetingTreeView
 } from "../tree/TreeMeetingProvider";
+import { ZoomMeetingManager } from "../managers/ZoomMeetingManager";
 
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
@@ -72,18 +73,40 @@ export function createCommands(): { dispose: () => void } {
     // INIT THE DOCUMENT LISTENER
     DocListenManager.getInstance();
 
-    // ADD BUTTON CMD
+    // ADD BOOKMARK CMD
     cmds.push(
         commands.registerCommand("zoomtime.addZoomLink", () => {
-            ZoomInfoManager.getInstance().showAddZoomInfoFlow();
+            ZoomInfoManager.getInstance().initiateAddZoomInfoFlow();
         })
     );
 
-    // REFRESH CMD
+    // ADD MEETING CMD
+    cmds.push(
+        commands.registerCommand("zoomtime.createZoomMeeting", () => {
+            ZoomMeetingManager.getInstance().initiateCreateMeetingFlow();
+        })
+    );
+
+    // REFRESH ALL TREES
     cmds.push(
         commands.registerCommand("zoomtime.refreshTree", () => {
             menuProvider.refresh();
             bookmarkProvider.refresh();
+            meetingsProvider.refresh();
+        })
+    );
+
+    // REFRESH BOOKMARK TREE
+    cmds.push(
+        commands.registerCommand("zoomtime.refreshBookmarkTree", () => {
+            bookmarkProvider.refresh();
+        })
+    );
+
+    // REFRESH MEETING TREE
+    cmds.push(
+        commands.registerCommand("zoomtime.refreshMeetingTree", () => {
+            meetingsProvider.refresh();
         })
     );
 

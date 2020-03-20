@@ -6,7 +6,8 @@ import {
     getFileDataAsJson,
     writeJsonData,
     openFileInEditor,
-    getSoftwareDir
+    getSoftwareDir,
+    launchInputBox
 } from "../utils/Util";
 const fs = require("fs");
 
@@ -29,7 +30,7 @@ export class ZoomInfoManager {
         if (!existingData) {
             return;
         }
-        const idx = existingData.findIndex((n: ZoomInfo) => n.name === label);
+        const idx = existingData.findIndex((n: ZoomInfo) => n.topic === label);
         if (idx !== -1) {
             // remove the item
             existingData.splice(idx, 1);
@@ -56,69 +57,39 @@ export class ZoomInfoManager {
         openFileInEditor(this.getZoomInfoFile());
     }
 
-    async showAddZoomInfoFlow() {
+    async initiateAddZoomInfoFlow() {
         // link prompt
-        let zoomLink = await this.promptForLink();
+        const zoomLink = await this.promptForLink();
         if (!zoomLink) {
             return;
         }
 
-        zoomLink = zoomLink.trim();
-
         // name prompt
-        let zoomName = await this.promptForName();
-
+        const zoomName = await this.promptForTopic();
         if (!zoomName) {
             return;
-            window.showInformationMessage(
-                "Please enter a zoom bookmark name to continue"
-            );
         }
-
-        zoomName = zoomName.trim();
 
         // add it
         const zoomInfo: ZoomInfo = new ZoomInfo();
-        zoomInfo.link = zoomLink;
-        zoomInfo.name = zoomName;
+        zoomInfo.join_url = zoomLink.trim();
+        zoomInfo.topic = zoomName.trim();
         this.addZoomInfo(zoomInfo);
-        commands.executeCommand("zoomtime.refreshTree");
     }
 
-    private async promptForName() {
-        return await this.launchInputBox(
-            "Assign a name to the meeting",
-            "Please enter a non-empty name to continue."
+    private async promptForTopic() {
+        return await launchInputBox(
+            "Assign a topic to the meeting",
+            "Please enter a non-empty topic to continue."
         );
     }
 
     private async promptForLink() {
-        return await this.launchInputBox(
+        return await launchInputBox(
             "Enter a Zoom link",
             "Please enter a valid and non-empty link to continue.",
             true
         );
-    }
-
-    private launchInputBox(
-        placeHolder: string,
-        usageMsg: string,
-        isUrl: boolean = false
-    ) {
-        return window.showInputBox({
-            value: "",
-            placeHolder,
-            validateInput: text => {
-                if (isUrl) {
-                    if (!text || !isValidUrl(text)) {
-                        return usageMsg;
-                    }
-                } else if (!text) {
-                    return usageMsg;
-                }
-                return null;
-            }
-        });
     }
 
     getZoomInfoFile() {
@@ -153,7 +124,7 @@ export class ZoomInfoManager {
         // check to make suer the link doesn't already exist
         if (Object.keys(existingData).length) {
             const linkExists = existingData.find(
-                (n: ZoomInfo) => n.name === info.name
+                (n: ZoomInfo) => n.topic === info.topic
             );
             if (linkExists) {
                 window.showErrorMessage("Meeting name already exists");
@@ -166,5 +137,7 @@ export class ZoomInfoManager {
 
         // save it
         writeJsonData(existingData, file);
+
+        commands.executeCommand("zoomtime.refreshBookmarkTree");
     }
 }

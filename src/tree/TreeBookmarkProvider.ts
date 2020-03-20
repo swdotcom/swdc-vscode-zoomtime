@@ -111,7 +111,7 @@ export class TreeBookmarkProvider implements TreeDataProvider<TreeNode> {
 
     async getZoomBookmarkParents(): Promise<TreeNode[]> {
         let treeItems: TreeNode[] = [];
-        const zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
+        let zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
 
         if (!zoomInfoList || zoomInfoList.length === 0) {
             const noMeetingsButton: TreeNode = getNoBookmarksButton();
@@ -119,24 +119,29 @@ export class TreeBookmarkProvider implements TreeDataProvider<TreeNode> {
             return treeItems;
         }
 
+        // filter only bookmark ones
+        zoomInfoList = zoomInfoList.filter((n: ZoomInfo) => n.bookmark);
+
         zoomInfoList.sort((a: ZoomInfo, b: ZoomInfo) => {
-            const nameA = a.name.toUpperCase();
-            const nameB = b.name.toUpperCase();
+            const nameA = a.topic.toUpperCase();
+            const nameB = b.topic.toUpperCase();
             return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
         });
 
         treeItems = zoomInfoList.map((info: ZoomInfo) => {
             // parent
             const node: TreeNode = new TreeNode();
-            node.label = info.name;
-            node.tooltip = info.link;
+            node.label = info.topic;
+            node.tooltip = info.join_url;
+            node.contextValue = "bookmark-parent";
 
             const children: TreeNode[] = [];
             // link child
             const linkNode: TreeNode = new TreeNode();
-            linkNode.label = info.link;
-            linkNode.value = info.link;
+            linkNode.label = info.join_url;
+            linkNode.value = info.join_url;
             linkNode.icon = "rocket-grey.png";
+            linkNode.contextValue = "bookmark-child";
             children.push(linkNode);
 
             node.children = children;

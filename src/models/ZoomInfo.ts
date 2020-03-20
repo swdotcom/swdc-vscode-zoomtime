@@ -1,5 +1,6 @@
 export class ZoomInfo {
-    public link: string = "";
-    public name: string = "";
+    public join_url: string = "";
+    public topic: string = "";
     public description: string = "";
+    public bookmark: boolean = true;
 }

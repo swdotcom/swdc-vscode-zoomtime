@@ -69,3 +69,7 @@ export function getNoBookmarksButton() {
 export function getNoMeetingsButton() {
     return getActionButton("No meetings found", "", "", "");
 }
+
+export function getConnectZoomInfoButton() {
+    return getActionButton("Connect Zoom to see your meetings", "", "", "");
+}
