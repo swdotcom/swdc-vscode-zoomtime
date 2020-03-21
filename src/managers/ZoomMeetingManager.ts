@@ -6,6 +6,8 @@ import { ZoomInfoManager } from "./ZoomInfoManager";
 import { ZoomInfo } from "../models/ZoomInfo";
 import { launchInputBox } from "../utils/Util";
 
+const moment = require("moment-timezone");
+
 export class ZoomMeetingManager {
     private static instance: ZoomMeetingManager;
 
@@ -24,8 +26,40 @@ export class ZoomMeetingManager {
         // logged on, fetch the meetings
         const api = "/users/me/meetings";
         const resultData = await zoomGet(api);
+
+        // data structure
+        //
+        // created_at:"2020-03-21T05:14:55Z"
+        // duration:60
+        // host_id:"pRzU_7_5THWk4c2Pp-C12A"
+        // id:153543960
+        // join_url:"https://zoom.us/j/153543960"
+        // start_time:"2020-05-04T18:00:00Z"
+        // timezone:"America/Los_Angeles"
+        // topic:"Zoom Test Meeting 1"
+        // type:8
+        // uuid:"Q1vrFMZ9SWy3JXsGjUzh2A=="
         if (resultData && resultData.data) {
             meetings = resultData.data.meetings;
+
+            // set the description basd on the type
+            // 1 = instant, 2 = scheduled, 3 = recurring w/ no fixed time, 8 = recurring w/ fixed time
+            meetings.forEach((meeting: ZoomMeeting) => {
+                let momentTime: any;
+                if (meeting.start_time) {
+                    momentTime = moment(meeting.start_time);
+                    meeting.start_time_seconds = momentTime.unix();
+
+                    if (meeting.type === 8) {
+                        const day = momentTime.format("ddd");
+                        const time = momentTime.format("hh:mm a");
+                        meeting.description = `Every ${day} at ${time}`;
+                    } else if (meeting.type === 2) {
+                        const date = momentTime.format("llll");
+                        meeting.description = `${date}`;
+                    }
+                }
+            });
         }
 
         return meetings;
@@ -60,7 +94,7 @@ export class ZoomMeetingManager {
 
     async createMeeting(topic: string, agenda: string) {
         let meetingInfo: ZoomMeetingInfo = new ZoomMeetingInfo();
-        // type => 1 = instant, 2 = scheduled, 3 = recurring w/ no fixed time, 4 = recurring w/ fixed time
+        // type => 1 = instant, 2 = scheduled, 3 = recurring w/ no fixed time, 8 = recurring w/ fixed time
         const payload = {
             topic,
             type: 1 /* instant */,

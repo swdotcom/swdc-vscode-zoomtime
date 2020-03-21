@@ -19,6 +19,8 @@ import {
 import { ZoomInfoManager } from "../managers/ZoomInfoManager";
 import { ZoomInfo } from "../models/ZoomInfo";
 
+const moment = require("moment-timezone");
+
 const zoomCollapsedStateMap: any = {};
 
 export const connectZoomMeetingTreeView = (view: TreeView<TreeNode>) => {
@@ -185,6 +187,14 @@ export class TreeMeetingProvider implements TreeDataProvider<TreeNode> {
                 linkNode.contextValue = "bookmark-child";
             }
             children.push(linkNode);
+
+            // if description is set create this child
+            if (info.description) {
+                const descriptionNode: TreeNode = new TreeNode();
+                descriptionNode.label = info.description;
+                descriptionNode.icon = "calendar.svg";
+                children.push(descriptionNode);
+            }
 
             node.children = children;
 
