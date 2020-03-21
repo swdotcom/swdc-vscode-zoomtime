@@ -22,8 +22,8 @@ export function isMac() {
     return process.platform.indexOf("darwin") !== -1;
 }
 
-export function launchUrl(url: string) {
-    if (!url.toLowerCase().startsWith("http")) {
+export function launchUrl(url: string, addHttpIfNotFound: boolean = true) {
+    if (!url.toLowerCase().startsWith("http") && addHttpIfNotFound) {
         // add it
         url = `https://${url}`;
     }
@@ -351,6 +351,7 @@ async function zoomConnectStatusHandler(tryCountUntilFound: number) {
             refetchZoomConnectStatusLazily(tryCountUntilFound);
         }
     } else {
+        window.showInformationMessage("Successfully connected to Zoom");
         // refresh the tree
         commands.executeCommand("zoomtime.refreshTree");
     }

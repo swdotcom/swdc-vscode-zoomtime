@@ -10,4 +10,5 @@ export class ZoomMeeting {
     public host_id: string = "";
     public id: string = "";
     public uuid: string = "";
+    public bookmark: boolean = false;
 }

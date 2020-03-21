@@ -63,13 +63,23 @@ export function getZoomConnectedButton() {
 }
 
 export function getNoBookmarksButton() {
-    return getActionButton("No bookmarks found", "", "", "");
+    return getActionButton("Add a bookmark", "", "zoomtime.addZoomLink", "");
 }
 
 export function getNoMeetingsButton() {
-    return getActionButton("No meetings found", "", "", "");
+    return getActionButton(
+        "Create a meeting",
+        "",
+        "zoomtime.createZoomMeeting",
+        ""
+    );
 }
 
 export function getConnectZoomInfoButton() {
-    return getActionButton("Connect Zoom to see your meetings", "", "", "");
+    return getActionButton(
+        "Connect Zoom to see or create meetings",
+        "",
+        "zoomtime.connectZoom",
+        ""
+    );
 }

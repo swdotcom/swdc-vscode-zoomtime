@@ -36,7 +36,15 @@ export const connectZoomBookmarkTreeView = (view: TreeView<TreeNode>) => {
             }
 
             const item: TreeNode = e.selection[0];
-            if (item.value) {
+            if (item.command) {
+                const args = item.commandArgs || null;
+                if (args) {
+                    commands.executeCommand(item.command, ...args);
+                } else {
+                    // run the command
+                    commands.executeCommand(item.command);
+                }
+            } else if (item.value) {
                 launchUrl(item.value);
                 commands.executeCommand("zoomtime.refreshTree");
             }
@@ -113,14 +121,14 @@ export class TreeBookmarkProvider implements TreeDataProvider<TreeNode> {
         let treeItems: TreeNode[] = [];
         let zoomInfoList: ZoomInfo[] = ZoomInfoManager.getInstance().getZoomInfoList();
 
+        // filter only bookmark ones
+        zoomInfoList = zoomInfoList.filter((n: ZoomInfo) => n.bookmark);
+
         if (!zoomInfoList || zoomInfoList.length === 0) {
             const noMeetingsButton: TreeNode = getNoBookmarksButton();
             treeItems.push(noMeetingsButton);
             return treeItems;
         }
-
-        // filter only bookmark ones
-        zoomInfoList = zoomInfoList.filter((n: ZoomInfo) => n.bookmark);
 
         zoomInfoList.sort((a: ZoomInfo, b: ZoomInfo) => {
             const nameA = a.topic.toUpperCase();

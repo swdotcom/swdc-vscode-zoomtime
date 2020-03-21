@@ -41,7 +41,15 @@ export const connectZoomMeetingTreeView = (view: TreeView<TreeNode>) => {
             }
 
             const item: TreeNode = e.selection[0];
-            if (item.value) {
+            if (item.command) {
+                const args = item.commandArgs || null;
+                if (args) {
+                    commands.executeCommand(item.command, ...args);
+                } else {
+                    // run the command
+                    commands.executeCommand(item.command);
+                }
+            } else if (item.value) {
                 launchUrl(item.value);
                 commands.executeCommand("zoomtime.refreshTree");
             }
@@ -139,7 +147,7 @@ export class TreeMeetingProvider implements TreeDataProvider<TreeNode> {
                 const meeting: ZoomMeeting = new ZoomMeeting();
                 meeting.topic = info.topic;
                 meeting.join_url = info.join_url;
-
+                meeting.bookmark = true;
                 meetings.push(meeting);
             });
         }
@@ -163,6 +171,9 @@ export class TreeMeetingProvider implements TreeDataProvider<TreeNode> {
             const node: TreeNode = new TreeNode();
             node.label = info.topic;
             node.tooltip = info.join_url;
+            if (info.bookmark) {
+                node.contextValue = "bookmark-parent";
+            }
 
             const children: TreeNode[] = [];
             // link child
@@ -170,6 +181,9 @@ export class TreeMeetingProvider implements TreeDataProvider<TreeNode> {
             linkNode.label = info.join_url;
             linkNode.value = info.join_url;
             linkNode.icon = "rocket-grey.png";
+            if (info.bookmark) {
+                linkNode.contextValue = "bookmark-child";
+            }
             children.push(linkNode);
 
             node.children = children;

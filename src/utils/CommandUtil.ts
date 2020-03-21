@@ -16,6 +16,7 @@ import {
     connectZoomMeetingTreeView
 } from "../tree/TreeMeetingProvider";
 import { ZoomMeetingManager } from "../managers/ZoomMeetingManager";
+const clipboardy = require("clipboardy");
 
 export function createCommands(): { dispose: () => void } {
     let cmds: any[] = [];
@@ -110,6 +111,13 @@ export function createCommands(): { dispose: () => void } {
         })
     );
 
+    cmds.push(
+        commands.registerCommand("zoomtime.copyZoomLink", (node: TreeNode) => {
+            // copy into memory
+            clipboardy.writeSync(node.value);
+        })
+    );
+
     // REMOVE CMD
     cmds.push(
         commands.registerCommand(
@@ -130,7 +138,7 @@ export function createCommands(): { dispose: () => void } {
     // SUBMIT FEEDBACK CMD
     cmds.push(
         commands.registerCommand("zoomtime.sendFeedback", () => {
-            launchUrl("mailto:cody@software.com");
+            launchUrl("mailto:cody@software.com", false);
             commands.executeCommand("zoomtime.refreshTree");
         })
     );

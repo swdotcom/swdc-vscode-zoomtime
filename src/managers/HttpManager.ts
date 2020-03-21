@@ -202,17 +202,17 @@ export async function zoomPost(api: string, payload: any, tries: number = 0) {
         .catch(async e => {
             if (e.response && e.response.status === 401 && tries < 1) {
                 // refresh the access token and try again
-                const accessTokenData = await softwarePost(
+                const refreshResult = await softwarePost(
                     "/auth/zoom/refreshAccessToken",
                     {},
                     getItem("jwt")
                 );
-                console.log("access token data: ", accessTokenData);
-                if (accessTokenData && accessTokenData.access_token) {
-                    setItem("zoom_access_token", accessTokenData.access_token);
+                if (refreshResult && refreshResult.data) {
+                    const accessTokenInfo = refreshResult.data;
+                    setItem("zoom_access_token", accessTokenInfo.access_token);
                     setItem(
                         "zoom_refresh_token",
-                        accessTokenData.refresh_token
+                        accessTokenInfo.refresh_token
                     );
                     tries += 1;
                     return zoomPost(api, payload, tries);
