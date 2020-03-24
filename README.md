@@ -23,7 +23,13 @@
     <img alt="Rating" src="https://vsmarketplacebadge.apphb.com/rating-short/softwaredotcom.zoom-time.svg"></a>
 </p>
 
+
+
 <br />
+
+<p align="center" style="margin: 0 0">
+  <img src="https://swdc-zoomtime.s3-us-west-1.amazonaws.com/zoom-time-diagram.png" alt="Zoom Time diagram" />
+</p>
 
 ## Features
 
