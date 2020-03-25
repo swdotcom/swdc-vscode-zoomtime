@@ -2,7 +2,7 @@
     "name": "zoom-time",
     "displayName": "Zoom Time",
     "description": "Access your team's Zoom links with one click, directly from VS Code",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "publisher": "softwaredotcom",
     "scripts": {
         "vscode:prepublish": "yarn run compile",
@@ -15,6 +15,7 @@
     "engines": {
         "vscode": "^1.43.0"
     },
+    "preview": true,
     "categories": [
         "Other"
     ],
