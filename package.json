@@ -2,7 +2,7 @@
     "name": "zoom-time",
     "displayName": "Zoom Time",
     "description": "Access your team's Zoom links with one click, directly from VS Code",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "publisher": "softwaredotcom",
     "scripts": {
         "vscode:prepublish": "yarn run compile",
@@ -130,17 +130,17 @@
                 {
                     "command": "zoomtime.editZoomLink",
                     "group": "inline@2",
-                    "when": "viewItem =~ /bookmark-parent/"
+                    "when": "viewItem =~ /zoom-bookmark-parent/"
                 },
                 {
                     "command": "zoomtime.removeZoomLink",
                     "group": "inline@3",
-                    "when": "viewItem =~ /bookmark-parent/"
+                    "when": "viewItem =~ /zoom-bookmark-parent/"
                 },
                 {
                     "command": "zoomtime.copyZoomLink",
                     "group": "inline@2",
-                    "when": "viewItem =~ /.*child/"
+                    "when": "viewItem =~ /zoom-bookmark-child/"
                 }
             ],
             "view/title": [

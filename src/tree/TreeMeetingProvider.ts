@@ -174,7 +174,7 @@ export class TreeMeetingProvider implements TreeDataProvider<TreeNode> {
             node.label = info.topic;
             node.tooltip = info.join_url;
             if (info.bookmark) {
-                node.contextValue = "bookmark-parent";
+                node.contextValue = "zoom-bookmark-parent";
             }
 
             const children: TreeNode[] = [];
@@ -184,7 +184,7 @@ export class TreeMeetingProvider implements TreeDataProvider<TreeNode> {
             linkNode.value = info.join_url;
             linkNode.icon = "rocket-grey.png";
             if (info.bookmark) {
-                linkNode.contextValue = "bookmark-child";
+                linkNode.contextValue = "zoom-bookmark-child";
             }
             children.push(linkNode);
 

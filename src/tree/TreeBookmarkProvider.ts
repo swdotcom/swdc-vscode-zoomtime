@@ -141,7 +141,7 @@ export class TreeBookmarkProvider implements TreeDataProvider<TreeNode> {
             const node: TreeNode = new TreeNode();
             node.label = info.topic;
             node.tooltip = info.join_url;
-            node.contextValue = "bookmark-parent";
+            node.contextValue = "zoom-bookmark-parent";
 
             const children: TreeNode[] = [];
             // link child
@@ -149,7 +149,7 @@ export class TreeBookmarkProvider implements TreeDataProvider<TreeNode> {
             linkNode.label = info.join_url;
             linkNode.value = info.join_url;
             linkNode.icon = "rocket-grey.png";
-            linkNode.contextValue = "bookmark-child";
+            linkNode.contextValue = "zoom-bookmark-child";
             children.push(linkNode);
 
             node.children = children;
